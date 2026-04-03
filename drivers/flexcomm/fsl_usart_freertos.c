@@ -54,7 +54,8 @@ static void USART_RTOS_Callback(USART_Type *base, usart_handle_t *state, status_
     }
     else
     {
-        xResult = pdFAIL;
+    	// Forward any error results: NoiseError, FramingError, ParityError, BaudrateNotSupport
+        xResult = xEventGroupSetBitsFromISR(handle->rxEvent, RTOS_USART_HARDWARE_ERROR, &xHigherPriorityTaskWoken);
     }
 
     if (xResult != pdFAIL)
@@ -142,6 +143,7 @@ int USART_RTOS_Init(usart_rtos_handle_t *handle, usart_handle_t *t_handle, const
     defcfg.parityMode   = cfg->parity;
     defcfg.enableTx     = true;
     defcfg.enableRx     = true;
+    defcfg.enableHardwareFlowControl = cfg->enableHardwareFlowControl;
 
     status = USART_Init(handle->base, &defcfg, cfg->srcclk);
     if (status != kStatus_Success)
@@ -253,7 +255,8 @@ int USART_RTOS_Send(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t lengt
         return kStatus_Fail;
     }
 
-    ev = xEventGroupWaitBits(handle->txEvent, RTOS_USART_COMPLETE, pdTRUE, pdFALSE, portMAX_DELAY);
+    ev = xEventGroupWaitBits(handle->txEvent, (RTOS_USART_COMPLETE | RTOS_USART_HARDWARE_ERROR),
+    		pdTRUE, pdFALSE, portMAX_DELAY);
     if ((ev & RTOS_USART_COMPLETE) == 0U)
     {
         retval = kStatus_Fail;
@@ -329,8 +332,8 @@ int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t le
         return kStatus_Fail;
     }
 
-    ev = xEventGroupWaitBits(handle->rxEvent, RTOS_USART_COMPLETE | RTOS_USART_RING_BUFFER_OVERRUN, pdTRUE, pdFALSE,
-                             portMAX_DELAY);
+    ev = xEventGroupWaitBits(handle->rxEvent, (RTOS_USART_COMPLETE | RTOS_USART_RING_BUFFER_OVERRUN |
+    		RTOS_USART_HARDWARE_ERROR), pdTRUE, pdFALSE, portMAX_DELAY);
     if ((ev & RTOS_USART_RING_BUFFER_OVERRUN) != 0U)
     {
         /* Stop data transfer to application buffer, ring buffer is still active */
@@ -340,6 +343,16 @@ int USART_RTOS_Receive(usart_rtos_handle_t *handle, uint8_t *buffer, uint32_t le
         (void)xEventGroupClearBits(handle->rxEvent, RTOS_USART_COMPLETE);
         retval         = kStatus_USART_RxRingBufferOverrun;
         local_received = 0;
+    }
+    else if ((ev & RTOS_USART_HARDWARE_ERROR) != 0U)
+    {
+    	/* Stop data transfer to application buffer, ring buffer is still active */
+		USART_TransferAbortReceive(handle->base, handle->t_state);
+		/* Prevent false indication of successful transfer in next call of USART_RTOS_Receive.
+		   RTOS_USART_COMPLETE flag could be set meanwhile overrun is handled */
+		(void)xEventGroupClearBits(handle->rxEvent, RTOS_USART_COMPLETE);
+		retval         = kStatus_USART_RxError;
+		local_received = 0;
     }
     else if ((ev & RTOS_USART_COMPLETE) != 0U)
     {
