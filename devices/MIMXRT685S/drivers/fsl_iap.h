@@ -72,31 +72,32 @@ enum
 /*! @brief FlexSPI Driver status. */
 enum _flexspi_status
 {
-    kStatus_FLEXSPI_Success         = MAKE_STATUS(kStatusGroup_Generic, 0), /*!< API is executed successfully*/
-    kStatus_FLEXSPI_Fail            = MAKE_STATUS(kStatusGroup_Generic, 1), /*!< API is executed fails*/
-    kStatus_FLEXSPI_InvalidArgument = MAKE_STATUS(kStatusGroup_Generic, 4), /*!< Invalid argument*/
-    kStatus_FLEXSPI_SequenceExecutionTimeout =
-        MAKE_STATUS(kStatusGroup_FlexSPI, 0), /*!< The FlexSPI Sequence Execution timeout*/
-    kStatus_FLEXSPI_InvalidSequence = MAKE_STATUS(kStatusGroup_FlexSPI, 1), /*!< The FlexSPI LUT sequence invalid*/
-    kStatus_FLEXSPI_DeviceTimeout   = MAKE_STATUS(kStatusGroup_FlexSPI, 2), /*!< The FlexSPI device timeout*/
-    kStatus_FLEXSPINOR_ProgramFail =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 0), /*!< Status for Page programming failure */
-    kStatus_FLEXSPINOR_EraseSectorFail =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 1),                               /*!< Status for Sector Erase failure */
-    kStatus_FLEXSPINOR_EraseAllFail = MAKE_STATUS(kStatusGroup_FlexSPINOR, 2), /*!< Status for Chip Erase failure */
-    kStatus_FLEXSPINOR_WaitTimeout  = MAKE_STATUS(kStatusGroup_FlexSPINOR, 3), /*!< Status for timeout */
-    kStatus_FLEXSPINOR_NotSupported = MAKE_STATUS(kStatusGroup_FlexSPINOR, 4), /*  Status for PageSize overflow */
-    kStatus_FLEXSPINOR_WriteAlignmentError =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 5), /*!< Status for Alignement error */
-    kStatus_FLEXSPINOR_CommandFailure =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 6), /*!< Status for Erase/Program Verify Error */
-    kStatus_FLEXSPINOR_SFDP_NotFound = MAKE_STATUS(kStatusGroup_FlexSPINOR, 7), /*!< Status for SFDP read failure */
-    kStatus_FLEXSPINOR_Unsupported_SFDP_Version =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 8), /*!< Status for Unrecognized SFDP version */
-    kStatus_FLEXSPINOR_Flash_NotFound =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 9), /*!< Status for Flash detection failure */
-    kStatus_FLEXSPINOR_DTRRead_DummyProbeFailed =
-        MAKE_STATUS(kStatusGroup_FlexSPINOR, 10), /*!< Status for DDR Read dummy probe failure */
+	kStatus_FLEXSPI_Success         = MAKE_STATUS(kStatusGroup_Generic, 0), /*!< API is executed successfully*/
+//    kStatus_FLEXSPI_Success         = MAKE_STATUS(kStatusGroup_Generic, 0), /*!< API is executed successfully*/
+//    kStatus_FLEXSPI_Fail            = MAKE_STATUS(kStatusGroup_Generic, 1), /*!< API is executed fails*/
+//    kStatus_FLEXSPI_InvalidArgument = MAKE_STATUS(kStatusGroup_Generic, 4), /*!< Invalid argument*/
+//    kStatus_FLEXSPI_SequenceExecutionTimeout =
+//        MAKE_STATUS(kStatusGroup_FlexSPI, 0), /*!< The FlexSPI Sequence Execution timeout*/
+//    kStatus_FLEXSPI_InvalidSequence = MAKE_STATUS(kStatusGroup_FlexSPI, 1), /*!< The FlexSPI LUT sequence invalid*/
+//    kStatus_FLEXSPI_DeviceTimeout   = MAKE_STATUS(kStatusGroup_FlexSPI, 2), /*!< The FlexSPI device timeout*/
+//    kStatus_FLEXSPINOR_ProgramFail =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 0), /*!< Status for Page programming failure */
+//    kStatus_FLEXSPINOR_EraseSectorFail =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 1),                               /*!< Status for Sector Erase failure */
+//    kStatus_FLEXSPINOR_EraseAllFail = MAKE_STATUS(kStatusGroup_FlexSPINOR, 2), /*!< Status for Chip Erase failure */
+//    kStatus_FLEXSPINOR_WaitTimeout  = MAKE_STATUS(kStatusGroup_FlexSPINOR, 3), /*!< Status for timeout */
+//    kStatus_FLEXSPINOR_NotSupported = MAKE_STATUS(kStatusGroup_FlexSPINOR, 4), /*  Status for PageSize overflow */
+//    kStatus_FLEXSPINOR_WriteAlignmentError =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 5), /*!< Status for Alignement error */
+//    kStatus_FLEXSPINOR_CommandFailure =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 6), /*!< Status for Erase/Program Verify Error */
+//    kStatus_FLEXSPINOR_SFDP_NotFound = MAKE_STATUS(kStatusGroup_FlexSPINOR, 7), /*!< Status for SFDP read failure */
+//    kStatus_FLEXSPINOR_Unsupported_SFDP_Version =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 8), /*!< Status for Unrecognized SFDP version */
+//    kStatus_FLEXSPINOR_Flash_NotFound =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 9), /*!< Status for Flash detection failure */
+//    kStatus_FLEXSPINOR_DTRRead_DummyProbeFailed =
+//        MAKE_STATUS(kStatusGroup_FlexSPINOR, 10), /*!< Status for DDR Read dummy probe failure */
 };
 /*! @} */
 
