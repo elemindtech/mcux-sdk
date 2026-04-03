@@ -32,8 +32,14 @@
 /*@}*/
 
 /*! @brief Retry times for waiting flag. */
+// Note: This is an Elemind modification, it is REDUNDANTLY defined in .cproject as a compiler define flag.
 #ifndef I2C_RETRY_TIMES
-#define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#define I2C_RETRY_TIMES 10000U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#endif
+
+// Note: This is an Elemind modification, it is REDUNDANTLY defined in .cproject as a compiler define flag.
+#ifndef FSL_FEATURE_I2C_TIMEOUT_RECOVERY
+#define FSL_FEATURE_I2C_TIMEOUT_RECOVERY 1
 #endif
 
 /*! @brief Whether to ignore the nack signal of the last byte during master transmit. */
