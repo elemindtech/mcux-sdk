@@ -107,19 +107,27 @@ status_t I2C_RTOS_Transfer(i2c_rtos_handle_t *handle, i2c_master_transfer_t *tra
         return kStatus_I2C_Busy;
     }
 
-    status = I2C_MasterTransferNonBlocking(handle->base, &handle->drv_handle, transfer);
-    if (status != kStatus_Success)
-    {
-        (void)xSemaphoreGive(handle->mutex);
-        return status;
-    }
+    // Guarantee the semaphore is cleared before starting the transfer.
+    xSemaphoreTake(handle->semaphore, 0);
 
-    /* Wait for transfer to finish */
-    (void)xSemaphoreTake(handle->semaphore, portMAX_DELAY);
+    status = I2C_MasterTransferNonBlocking(handle->base, &handle->drv_handle, transfer);
+    if (status == kStatus_Success)
+    {
+        /* Wait for transfer to finish, or timeout */
+        if (xSemaphoreTake(handle->semaphore, pdMS_TO_TICKS(500)) != pdTRUE)
+        {
+            status = kStatus_I2C_Timeout;
+            I2C_MasterTransferAbort(handle->base, &handle->drv_handle);
+        }
+        else
+        {
+            status = handle->async_status;
+        }
+    }
 
     /* Unlock resource mutex */
     (void)xSemaphoreGive(handle->mutex);
 
     /* Return status captured by callback function */
-    return handle->async_status;
+    return status;
 }
